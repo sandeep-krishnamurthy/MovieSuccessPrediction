@@ -1,10 +1,12 @@
 import sys;
+from YouTubeDataProvider import getYouTubeComments
+from TwitterDataProvider import get_tweets
 
 # Entry point of complete project.
 
 # Get all parameters required for execution.
 movie_name = raw_input("Enter Movie Name: ");
-movie_language = raw_input("Language of '"movie_name"' movie? "); 
+movie_language = raw_input("Language of '"+ movie_name + "' movie? "); 
 #movie_released = (int)raw_input("Is this movie already released? 0-No 1-Yes: ");
 
 # Build keywords for search.
@@ -20,13 +22,21 @@ print "Systems is learning and getting trained to predict :) :)....\n"
 
 
 # Fetch data from twitter
-print "Fetching tweets from Twitter for keyword = ' " + key_word =" '. Please wait.....\n"
+print "Fetching tweets from Twitter for keyword = ' " + key_word +" '. Please wait.....\n"
+
+twitter_data = get_tweets(key_word, 10)
+
+print "Completed fetching tweets from Twitter !!\n\n"
 
 # Fetch data from youtube
-print "Fetching tweets from YouTube for keyword = ' " + key_word =" '. Please wait.....\n"
+print "Fetching videos and comments from YouTube for keyword = ' " + key_word +" '. Please wait.....\n"
+
+youTube_data = getYouTubeComments(key_word, 10)
+
+print "Completed fetching YouTube comments !!"
 
 # Clean twitter data
-print "Cleaning tweets. Please wait.....\n"
+print "Cleaning tweets. Please wait.....\n\n"
 
 # Clean YouTube data
 print "Cleaning youtube data. Please wait.....\n"
