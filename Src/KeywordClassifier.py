@@ -1,33 +1,23 @@
 import sys
 import os
 import re
-import classifier_helper, html_helper, pickle
+import pickle
 
-reload(sys)
-sys.setdefaultencoding = 'utf-8'
-# This is to solve issues with respect to relative file paths.
-sys.path.append(os.path.realpath('..'))
 
 class KeywordClassifier:
     """ Classifier using baseline method aka keyword based classification. """
     
-    def __init__(self, data, keyword, time):
-        #Instantiate classifier helper        
-        self.helper = classifier_helper.ClassifierHelper('../Data/KeywordClassifierData/feature_list.txt')
+    def __init__(self, data):
         #Remove duplicates
 
         self.dataLen = len(data)
         self.origData = self.getUniqData(data)
         self.processedData = self.getProcessedTweets(self.origData)
-        
+       
         self.results = {}
         self.neut_count = [0] * self.dataLen
         self.pos_count = [0] * self.dataLen
         self.neg_count = [0] * self.dataLen
-
-        self.time = time
-        self.keyword = keyword
-        self.html = html_helper.HTMLHelper()
     #end
     
     #start getUniqData
@@ -52,7 +42,7 @@ class KeywordClassifier:
             d = data[i]
             tw = []
             for t in d:
-                tw.append(self.helper.process_tweet(t))
+                tw.append(t) #Already processed at this point.
             tweets[i] = tw            
         #end loop
         return tweets
@@ -137,12 +127,12 @@ class KeywordClassifier:
     #start printStats
     # Here utilize this data for plotting google chart.                
     def printResults(self):
-        print self.keyword
+        #print self.keyword
         #print self.results
-        print self.time
-        print self.pos_count
-        print self.neg_count
-        print self.neut_count
+        
+        print "Positive: ", self.pos_count
+        print "Negative: ", self.neg_count
+        print "Neutral: ", self.neut_count
 
         # 
         #return self.html.getResultHTML(self.keyword, self.results, self.time, self.pos_count, \

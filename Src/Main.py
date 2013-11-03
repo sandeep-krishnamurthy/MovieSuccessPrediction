@@ -3,6 +3,7 @@ from YouTubeDataProvider import getYouTubeComments
 from TwitterDataProvider import get_tweets
 import IOHelper
 import DataPreprocessor
+import KeywordClassifier
 
 # Entry point of complete project.
 
@@ -26,37 +27,37 @@ key_word = (movie_name+ " " + movie_language + " Movie");
 
 #--------------------------------------- STEP 2: TWITTER DATA---------------------------------------------
 
-twitter_data = []
+twitter_data = {}
 is_tweet_from_file = False
 
 # check if data is already present or should be fetched
 if (IOHelper.checkIfFileExists('../Data/TwitterDataContainer', key_word + '.csv')):
     print "Data already present !! Skipping data fetch from twitter"
-    twitter_data = IOHelper.readCsvToStringList('../Data/TwitterDataContainer/'+ key_word + '.csv')
+    twitter_data[0] = IOHelper.readCsvToStringList('../Data/TwitterDataContainer/'+ key_word + '.csv')
     print "Completed fetching tweets from file !!\n\n"
     is_tweet_from_file = True
 else:
     # Fetch data from twitter
     print "Fetching tweets from Twitter for keyword = ' " + key_word +" '. Please wait.....\n"
-    twitter_data = get_tweets(key_word, 10)
+    twitter_data[0] = get_tweets(key_word, 10)
     print "Completed fetching tweets from Twitter !!\n\n"
 
 
 #--------------------------------------- STEP 3: YOUTUBE DATA---------------------------------------------
 
-youTube_data = []
+youTube_data = {}
 is_yt_comment_from_file = False
 
 # check if data is already present or should be fetched
 if (IOHelper.checkIfFileExists('../Data/YouTubeDataContainer', key_word + '.csv')):
     print "Data already present !! Skipping data fetch from YouTube"
-    youTube_data = IOHelper.readCsvToStringList('../Data/YouTubeDataContainer/'+ key_word + '.csv')
+    youTube_data[0] = IOHelper.readCsvToStringList('../Data/YouTubeDataContainer/'+ key_word + '.csv')
     print "Completed fetching youtube comments from file !!\n\n"
     is_yt_comment_from_file = True
 else:
     # Fetch data from youtube
     print "Fetching videos and comments from YouTube for keyword = ' " + key_word + ' Trailer' +" '. Please wait.....\n"
-    youTube_data = getYouTubeComments(key_word+' Trailer', 10)
+    youTube_data[0] = getYouTubeComments(key_word+' Trailer', 10)
     print "Completed fetching YouTube comments !!"
 
 #--------------------------------------- STEP 4: PREPROCESS TWITTER DATA---------------------------------------
@@ -64,7 +65,7 @@ else:
 if (is_tweet_from_file):
     print "Data is already pre-processed !! Skipping twitter data pre-processing"
 else:
-    twitter_data = DataPreprocessor.PreprocessStringList(twitter_data)
+    twitter_data[0] = DataPreprocessor.PreprocessStringList(twitter_data[0])
     print "Twitter Data pre-processing complete !!"
 
 #--------------------------------------- STEP 5: PREPROCESS YOUTUBE DATA---------------------------------------    
@@ -72,20 +73,30 @@ else:
 if (is_yt_comment_from_file):
     print "Data is already pre-processed !! Skipping youtube data pre-processing"
 else:
-    youTube_data = DataPreprocessor.PreprocessStringList(youTube_data)
+    youTube_data[0] = DataPreprocessor.PreprocessStringList(youTube_data[0])
     print "YouTube Data pre-processing complete !!"
     
 #--------------------------------------- STEP 6: STORE TWITTER AND YOUTUBE DATA-----------------------------------
 
 if( not is_tweet_from_file):
-    IOHelper.writeStringListToCsv('../Data/TwitterDataContainer/'+ key_word + '.csv', twitter_data)
+    IOHelper.writeStringListToCsv('../Data/TwitterDataContainer/'+ key_word + '.csv', twitter_data[0])
     print "Succesfully stored retrieved twitter data to file !!\n\n"
 
 if( not is_yt_comment_from_file):
-    IOHelper.writeStringListToCsv('../Data/YouTubeDataContainer/'+ key_word + '.csv', youTube_data)
+    IOHelper.writeStringListToCsv('../Data/YouTubeDataContainer/'+ key_word + '.csv', youTube_data[0])
     print "Succesfully stored retrieved youtube data to file !!\n\n"
 
-#--------------------------------------- STEP 7: STORE TWITTER AND YOUTUBE DATA-----------------------------------
+#--------------------------------------- STEP 7: BASELINE CLASSIFICATION -----------------------------------
+
+print "Twitter classification Results:\n\n"
+bc = KeywordClassifier.KeywordClassifier(twitter_data)
+bc.classify()
+bc.printResults()
+
+print "\n\nYoutube data classification Results:\n\n"
+bc = KeywordClassifier.KeywordClassifier(youTube_data)
+bc.classify()
+bc.printResults()
     
 # Calculate using SVM Classifier
 print "Using SVM Classification Technique. Please wait...\n"
