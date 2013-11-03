@@ -21,7 +21,7 @@ def get_tweets(keyword, maxtweets=10):
         ts = TwitterSearch(consumer_key = CONSUMER_KEY,consumer_secret = CONSUMER_SECRET,access_token = ACCESS_TOKEN,access_token_secret = ACCESS_TOKEN_SECRET)
 
         for tweet in ts.searchTweetsIterable(searchOrder):
-            #print( '@%s tweeted: %s' % (tweet['user']['screen_name'],tweet['text'] ) )
+            #print( tweet['text'] ) 
             tweets.append(tweet['text'])
 
     except Exception as e:
@@ -29,3 +29,5 @@ def get_tweets(keyword, maxtweets=10):
         print (e)
 
     return tweets
+
+get_tweets("Lucia Kannada Movie", 10)

@@ -13,7 +13,7 @@ class KeywordClassifier:
     
     def __init__(self, data, keyword, time):
         #Instantiate classifier helper        
-        self.helper = classifier_helper.ClassifierHelper('Data/KeywordClassifierData/feature_list.txt')
+        self.helper = classifier_helper.ClassifierHelper('../Data/KeywordClassifierData/feature_list.txt')
         #Remove duplicates
 
         self.dataLen = len(data)
@@ -60,7 +60,7 @@ class KeywordClassifier:
     #start classify
     def classify(self):
         #load positive keywords file          
-        inpfile = open('Data/KeywordClassifierData/pos_mod.txt', "r")            
+        inpfile = open('../Data/KeywordClassifierData/pos_mod.txt', "r")            
         line = inpfile.readline()
         positive_words = []
         while line:
@@ -68,7 +68,7 @@ class KeywordClassifier:
             line = inpfile.readline()
             
         #load negative keywords file    
-        inpfile = open('Data/KeywordClassifierData/neg_mod.txt', "r")            
+        inpfile = open('../Data/KeywordClassifierData/neg_mod.txt', "r")            
         line = inpfile.readline()
         negative_words = []
         while line:
@@ -101,7 +101,7 @@ class KeywordClassifier:
             #end inner loop
             self.results[i] = res
         #end outer loop   
-        filename = 'Data/KeywordClassifierData/results_lastweek.pickle'
+        filename = '../Data/KeywordClassifierData/results_lastweek.pickle'
         outfile = open(filename, 'wb')        
         pickle.dump(self.results, outfile)        
         outfile.close()
