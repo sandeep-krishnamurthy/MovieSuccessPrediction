@@ -5,6 +5,10 @@ import IOHelper
 import DataPreprocessor
 import KeywordClassifier
 import NaiveBayesClassifier
+import libsvm_classifier
+import datetime
+
+print "START TIME: ", datetime.datetime.time(datetime.datetime.now())
 
 # Entry point of complete project.
 
@@ -39,8 +43,10 @@ if (IOHelper.checkIfFileExists('../Data/TwitterDataContainer', key_word + '.csv'
     is_tweet_from_file = True
 else:
     # Fetch data from twitter
-    print "Fetching tweets from Twitter for keyword = ' " + key_word +" '. Please wait.....\n"
-    twitter_data[0] = get_tweets(key_word, 10)
+    #print "Fetching tweets from Twitter for keyword = ' " + key_word +" '. Please wait.....\n"
+    print "Fetching tweets from Twitter for keyword = ' " + movie_name + " Movie" +" '. Please wait.....\n"
+    #twitter_data[0] = get_tweets(key_word, 100)
+    twitter_data[0] = get_tweets(movie_name+' Movie', 15)
     print "Completed fetching tweets from Twitter !!\n\n"
 
 
@@ -99,11 +105,35 @@ bc = KeywordClassifier.KeywordClassifier(youTube_data)
 bc.classify()
 bc.printResults()
 
+#--------------------------------------- STEP 8: SVM CLASSIFICATION -----------------------------------
 
-# Calculate using SVM Classifier
 print "Using SVM Classification Technique. Please wait...\n"
 
+# SVM on Twitter
+print "Using SVM Classification Technique on Twitter Data. Please wait...\n"
+
+#trainingDataFile = 'data/training_trimmed.csv'
+trainingDataFile = '../Data/SVM/trimmed_training_dataset_2000.csv'
+classifierDumpFile = '../Data/SVM/svm_test_model.pickle'
+trainingRequired = 0
+sc = libsvm_classifier.SVMClassifier(twitter_data, key_word, trainingDataFile, classifierDumpFile, trainingRequired)
+sc.classify()
+sc.printResults()
+#sc.accuracy()
+
+#SVM on YouTube Data
+
+print "Using SVM Classification Technique on YouTube Data. Please wait...\n"
+
+trainingRequired = 0
+#trainingDataFile = 'data/full_training_dataset.csv'                
+sc = libsvm_classifier.SVMClassifier(youTube_data, key_word, trainingDataFile, classifierDumpFile, trainingRequired)
+sc.classify()
+sc.printResults()
+
 print "SVM based prediction done !!!\n"
+
+#--------------------------------------- STEP 9: NAIVE BAYES CLASSIFICATION -----------------------------------
 
 # Calculate using Naive Bayes Classifier
 print "Using Naive Bayes Classification Technique on Twitter Data. Please wait...\n"
@@ -111,25 +141,30 @@ print "Using Naive Bayes Classification Technique on Twitter Data. Please wait..
 trainingDataFile = '../Data/NaiveBayes/full_training_dataset.csv'
 # Here we can use some other training data set - shortened for speeding process.
 classifierDumpFile = '../Data/NaiveBayes/naivebayes_test_model.pickle'
-trainingRequired = 1 # Set to 0 when not required after pickle file is created.
+trainingRequired = 0 # Set to 0 when not required after pickle file is created.
 time = 'today'
 nb = NaiveBayesClassifier.NaiveBayesClassifier(twitter_data, key_word, time,trainingDataFile, classifierDumpFile, trainingRequired)
 nb.classify()
-nb.accuracy()
+#nb.accuracy()
+#nb.writeOutput('nboutput1.txt')
+nb.printResults()
 
-print "Using Naive Bayes Classification Technique on Twitter Data. Please wait...\n"
+print "Using Naive Bayes Classification Technique on YouTube Data. Please wait...\n"
+trainingRequired = 0
 nb = NaiveBayesClassifier.NaiveBayesClassifier(youTube_data, key_word, time,trainingDataFile, classifierDumpFile, trainingRequired)
 nb.classify()
-nb.accuracy()
-
+#nb.accuracy()
+#nb.writeOutput('nboutput2.txt')
+nb.printResults()
     
 print "Naive Bayes based prediction done !!!\n"
+
+#--------------------------------------- STEP 10: MAX ENTROPY CLASSIFICATION -----------------------------------
 
 # Calculate using Maximum Entropy Classifier
 print "Using Maximum Entropy Classification Technique. Please wait...\n"
 
 print "Maximum Entropy based prediction done !!!\n"
 
-# Print Results of all 3 methods.
 
-
+print "END TIME: ", datetime.datetime.time(datetime.datetime.now())

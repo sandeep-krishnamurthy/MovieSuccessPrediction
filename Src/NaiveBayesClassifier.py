@@ -191,7 +191,12 @@ class NaiveBayesClassifier:
             #end inner loop
         #end outer loop      
     #end writeOutput    
-    
+
+    def printResults(self):
+        print "Positive : " , self.pos_count
+        print "Negative : ", self.neg_count
+        print "Neutral : ", self.neut_count
+        
     #start getHTML
     def getHTML(self):
         return self.html.getResultHTML(self.keyword, self.results, self.time, self.pos_count, \
