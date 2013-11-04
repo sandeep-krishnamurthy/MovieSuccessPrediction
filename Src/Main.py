@@ -4,6 +4,7 @@ from TwitterDataProvider import get_tweets
 import IOHelper
 import DataPreprocessor
 import KeywordClassifier
+import NaiveBayesClassifier
 
 # Entry point of complete project.
 
@@ -97,15 +98,31 @@ print "\n\nYoutube data classification Results:\n\n"
 bc = KeywordClassifier.KeywordClassifier(youTube_data)
 bc.classify()
 bc.printResults()
-    
+
+
 # Calculate using SVM Classifier
 print "Using SVM Classification Technique. Please wait...\n"
 
 print "SVM based prediction done !!!\n"
 
 # Calculate using Naive Bayes Classifier
-print "Using Naive Bayes Classification Technique. Please wait...\n"
+print "Using Naive Bayes Classification Technique on Twitter Data. Please wait...\n"
 
+trainingDataFile = '../Data/NaiveBayes/full_training_dataset.csv'
+# Here we can use some other training data set - shortened for speeding process.
+classifierDumpFile = '../Data/NaiveBayes/naivebayes_test_model.pickle'
+trainingRequired = 1 # Set to 0 when not required after pickle file is created.
+time = 'today'
+nb = NaiveBayesClassifier.NaiveBayesClassifier(twitter_data, key_word, time,trainingDataFile, classifierDumpFile, trainingRequired)
+nb.classify()
+nb.accuracy()
+
+print "Using Naive Bayes Classification Technique on Twitter Data. Please wait...\n"
+nb = NaiveBayesClassifier.NaiveBayesClassifier(youTube_data, key_word, time,trainingDataFile, classifierDumpFile, trainingRequired)
+nb.classify()
+nb.accuracy()
+
+    
 print "Naive Bayes based prediction done !!!\n"
 
 # Calculate using Maximum Entropy Classifier
