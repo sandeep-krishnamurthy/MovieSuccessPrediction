@@ -3,9 +3,11 @@ import gdata.youtube.service
 from apiclient.discovery import build
 #from optparse import OptionParser
 
-DEVELOPER_KEY = "AIzaSyCU-Acum9OolSjmlAH_SJeTFSwLbAJfhTE"
-YOUTUBE_API_SERVICE_NAME = "youtube"
-YOUTUBE_API_VERSION = "v3"
+import keyprovider
+
+DEVELOPER_KEY = keyprovider.getYouTubeDeveloperKey()
+YOUTUBE_API_SERVICE_NAME = keyprovider.getYouTubeServiceName()
+YOUTUBE_API_VERSION = keyprovider.getYouTubeVersion()
 
 yt_service = gdata.youtube.service.YouTubeService()
 # Comment feed URL

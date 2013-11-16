@@ -217,9 +217,9 @@ class SVMClassifier:
             total += 1
             count += 1
         #end loop
-        self.accuracy = (float(correct)/total)*100
-        print 'Total = %d, Correct = %d, Wrong = %d, Accuracy = %.2f' % \
-                                                (total, correct, wrong, self.accuracy)        
+        #self.accuracy = (float(correct)/total)*100
+        #print 'Total = %d, Correct = %d, Wrong = %d, Accuracy = %.2f' % \
+         #                                       (total, correct, wrong, self.accuracy)        
     #end
 
     def printResults(self):

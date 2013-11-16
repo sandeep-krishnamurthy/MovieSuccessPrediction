@@ -1,9 +1,11 @@
 from TwitterSearch import *
 
-CONSUMER_KEY = '5vm38GTOO8WWFOqNRTMOiQ'
-CONSUMER_SECRET = 'pzokQ4JJNe4WVApB4Rc1tGe2xWWNlk7BeSkaS5Oa5Y'
-ACCESS_TOKEN = '825058345-QngBxmsQKT22KOMlUYF8Ca2nu3cFt6E9dGU63F7A'
-ACCESS_TOKEN_SECRET = 'Xd08I1vSOqQIalHm5LJjTjCFxoXWYh6zXgqZ5xeJI'
+import keyprovider
+
+CONSUMER_KEY = keyprovider.getTwitterConsumerKey()
+CONSUMER_SECRET = keyprovider.getTwitterConsumerSecret()
+ACCESS_TOKEN = keyprovider.getTwitterAccessToken()
+ACCESS_TOKEN_SECRET = keyprovider.getTwitterAccessTokenSecret()
 
 def get_tweets(keyword, maxtweets=10):
 
