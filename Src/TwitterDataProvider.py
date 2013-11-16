@@ -32,4 +32,4 @@ def get_tweets(keyword, maxtweets=10):
 
     return tweets
 
-get_tweets("Lucia Kannada Movie", 10)
+#get_tweets("Lucia Kannada Movie", 10)
