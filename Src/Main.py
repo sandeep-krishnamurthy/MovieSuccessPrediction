@@ -46,7 +46,7 @@ else:
     #print "Fetching tweets from Twitter for keyword = ' " + key_word +" '. Please wait.....\n"
     print "Fetching tweets from Twitter for keyword = ' " + movie_name + " Movie" +" '. Please wait.....\n"
     #twitter_data[0] = get_tweets(key_word, 100)
-    twitter_data[0] = get_tweets(movie_name+' Movie', 15)
+    twitter_data[0] = get_tweets(movie_name+' Movie', 10)
     print "Completed fetching tweets from Twitter !!\n\n"
 
 
@@ -96,14 +96,17 @@ if( not is_yt_comment_from_file):
 #--------------------------------------- STEP 7: BASELINE CLASSIFICATION -----------------------------------
 
 print "Twitter classification Results:\n\n"
-bc = KeywordClassifier.KeywordClassifier(twitter_data)
+
+
+
+bc = KeywordClassifier.KeywordClassifier(twitter_data, key_word)
 bc.classify()
-bc.printResults()
+bc.printResults('twitter', 0) # 0 is for marking figure number - 0 and 1 is used here
 
 print "\n\nYoutube data classification Results:\n\n"
-bc = KeywordClassifier.KeywordClassifier(youTube_data)
+bc = KeywordClassifier.KeywordClassifier(youTube_data, key_word)
 bc.classify()
-bc.printResults()
+bc.printResults('youtube', 2) 
 
 #--------------------------------------- STEP 8: SVM CLASSIFICATION -----------------------------------
 
@@ -118,7 +121,7 @@ classifierDumpFile = '../Data/SVM/svm_test_model.pickle'
 trainingRequired = 0
 sc = libsvm_classifier.SVMClassifier(twitter_data, key_word, trainingDataFile, classifierDumpFile, trainingRequired)
 sc.classify()
-sc.printResults()
+sc.printResults('twitter', 4)
 #sc.accuracy()
 
 #SVM on YouTube Data
@@ -129,7 +132,7 @@ trainingRequired = 0
 #trainingDataFile = 'data/full_training_dataset.csv'                
 sc = libsvm_classifier.SVMClassifier(youTube_data, key_word, trainingDataFile, classifierDumpFile, trainingRequired)
 sc.classify()
-sc.printResults()
+sc.printResults('youtube',  6)
 
 print "SVM based prediction done !!!\n"
 
@@ -147,7 +150,7 @@ nb = NaiveBayesClassifier.NaiveBayesClassifier(twitter_data, key_word, time,trai
 nb.classify()
 #nb.accuracy()
 #nb.writeOutput('nboutput1.txt')
-nb.printResults()
+nb.printResults('twitter', 8)
 
 print "Using Naive Bayes Classification Technique on YouTube Data. Please wait...\n"
 trainingRequired = 0
@@ -155,16 +158,8 @@ nb = NaiveBayesClassifier.NaiveBayesClassifier(youTube_data, key_word, time,trai
 nb.classify()
 #nb.accuracy()
 #nb.writeOutput('nboutput2.txt')
-nb.printResults()
+nb.printResults('youtube',  10)
     
 print "Naive Bayes based prediction done !!!\n"
-
-#--------------------------------------- STEP 10: MAX ENTROPY CLASSIFICATION -----------------------------------
-
-# Calculate using Maximum Entropy Classifier
-print "Using Maximum Entropy Classification Technique. Please wait...\n"
-
-print "Maximum Entropy based prediction done !!!\n"
-
 
 print "END TIME: ", datetime.datetime.time(datetime.datetime.now())

@@ -89,21 +89,22 @@ class ClassifierHelper:
     
     #start process_tweet
     def process_tweet(self, tweet):
-        #Conver to lower case
-        tweet = tweet.lower()
-        #Convert https?://* to URL
-        tweet = re.sub('((www\.[\s]+)|(https?://[^\s]+))','URL',tweet)
-        #Convert @username to AT_USER
-        tweet = re.sub('@[^\s]+','AT_USER',tweet)    
-        #Remove additional white spaces
-        tweet = re.sub('[\s]+', ' ', tweet)
-        #Replace #word with word
-        tweet = re.sub(r'#([^\s]+)', r'\1', tweet)
-        #trim
-        tweet = tweet.strip()
-        #remove first/last " or 'at string end
-        tweet = tweet.rstrip('\'"')
-        tweet = tweet.lstrip('\'"')
+        if tweet is not None:
+            #Conver to lower case
+            tweet = tweet.lower()
+            #Convert https?://* to URL
+            tweet = re.sub('((www\.[\s]+)|(https?://[^\s]+))','URL',tweet)
+            #Convert @username to AT_USER
+            tweet = re.sub('@[^\s]+','AT_USER',tweet)    
+            #Remove additional white spaces
+            tweet = re.sub('[\s]+', ' ', tweet)
+            #Replace #word with word
+            tweet = re.sub(r'#([^\s]+)', r'\1', tweet)
+            #trim
+            tweet = tweet.strip()
+            #remove first/last " or 'at string end
+            tweet = tweet.rstrip('\'"')
+            tweet = tweet.lstrip('\'"')
         return tweet
     #end 
     

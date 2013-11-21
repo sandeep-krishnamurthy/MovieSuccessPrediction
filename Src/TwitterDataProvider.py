@@ -32,4 +32,5 @@ def get_tweets(keyword, maxtweets=10):
 
     return tweets
 
-#get_tweets("Lucia Kannada Movie", 10)
+#tweets = get_tweets("Conjuring Movie", 10)
+#print "Total Tweets extracted: ", len(tweets)

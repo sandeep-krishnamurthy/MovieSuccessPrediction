@@ -38,7 +38,9 @@ def getYouTubeComments(keyword, maxVideos=10):
                     youTubeComments.append(comment_entry.content.text)    
 
                 if comment_feed is not None:
-                    comment_feed = yt_service.Query(comment_feed.GetNextLink().href)
+                    nextLinkRef = comment_feed.GetNextLink()
+                    if nextLinkRef is not None:
+                        comment_feed = yt_service.Query(nextLinkRef.href)
 
                 count = count + 1
                 # Fetch only top 100 comments
@@ -76,4 +78,5 @@ def getYouTubeVideoIds(keyword, maxresults):
 
 
 
-#getYouTubeComments('Conjuring English Movie', 10)
+#comments = getYouTubeComments('Conjuring English Movie', 10)
+#print "Total comments retrieved : ", len(comments)

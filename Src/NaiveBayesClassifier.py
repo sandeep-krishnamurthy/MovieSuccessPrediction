@@ -2,6 +2,14 @@ import nltk.classify
 import re, pickle, csv, os
 import ClassifierHelper
 
+from matplotlib.backends.backend_pdf import PdfPages
+from os import system
+from os import path
+import os
+
+import Result_Calculator
+import chart_helper
+
 #start class
 class NaiveBayesClassifier:
     """ Naive Bayes Classifier """
@@ -14,6 +22,9 @@ class NaiveBayesClassifier:
         self.lenTweets = len(data)
         self.origTweets = self.getUniqData(data)
         self.tweets = self.getProcessedTweets(self.origTweets)
+
+        self.total_count = len(self.origTweets[0])
+        #print 'important:', len(data[0]), len(self.origTweets[0])
         
         self.results = {}
         self.neut_count = [0] * self.lenTweets
@@ -192,14 +203,65 @@ class NaiveBayesClassifier:
         #end outer loop      
     #end writeOutput    
 
-    def printResults(self):
-        print "Positive : " , self.pos_count
-        print "Negative : ", self.neg_count
-        print "Neutral : ", self.neut_count
+    def printResults(self, source, fig_num):
+        #print "Positive : " , self.pos_count
+        #print "Negative : ", self.neg_count
+        #print "Neutral : ", self.neut_count
+
         
+        positive_count = self.pos_count[0]
+        negative_count = self.neg_count[0]
+        neutral_count = self.neut_count[0]
+        
+        res = Result_Calculator.perform_analysis(self.total_count, positive_count, negative_count, neutral_count)
+
+        title = None
+        outfile_path = path.abspath('../Results/NaiveBayes/'+ self.keyword +' '+ source + '.pdf')
+
+        # No Sufficient data available
+        if res == "Cannot Predict":
+            output = "We don't have sufficient data to predict result for " + self.keyword + " sorry :( :("
+            title = chart_helper.create_TitlePage(output, fig_num)
+            pp = PdfPages(outfile_path)
+            pp.savefig(title)
+            pp.close()
+
+            os.startfile(outfile_path, 'open')
+            
+            print output                     
+            return
+
+        # Else we have predicted some output
+         # Calculate percentages of positive and negative
+        if positive_count >= negative_count:
+            positive_count = float(positive_count) + (0.7 * float(neutral_count))
+            negative_count = float(negative_count) + (0.3 * float(neutral_count))
+        else:
+            positive_count = float(positive_count) + (0.3 * float(neutral_count))
+            negative_count = float(negative_count) + (0.7 * float(neutral_count))
+
+        
+        positive_percent = (float(positive_count) / float(self.total_count)) * 100
+        negative_percent = (float(negative_count) / float(self.total_count)) * 100
+
+        output = "NAIVE BAYES CLASSIFIER PREDICTION:\n\n" + self.keyword + " is going to be " + res
+        print output
+
+        title = chart_helper.create_TitlePage(output, fig_num)
+        p_chart = chart_helper.generate_piechart('Naive Bayes Classifier Results', positive_percent, negative_percent, fig_num+1)
+        
+        pp = PdfPages(outfile_path)
+        pp.savefig(title)
+        pp.savefig(p_chart)
+        pp.close()
+
+        os.startfile(outfile_path, 'open')
+        
+'''
     #start getHTML
     def getHTML(self):
         return self.html.getResultHTML(self.keyword, self.results, self.time, self.pos_count, \
                                        self.neg_count, self.neut_count, 'naivebayes')
     #end
 #end class
+'''
